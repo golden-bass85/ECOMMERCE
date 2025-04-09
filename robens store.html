@@ -42,6 +42,15 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+        .sort {
+            margin: 20px auto;
+            text-align: center;
+        }
+        .sort select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
         .container {
             width: 90%;
             max-width: 1200px;
@@ -89,6 +98,39 @@
         .wishlist h2 {
             text-align: center;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -115,36 +157,50 @@
     </select>
 </div>
 
+<div class="sort">
+    <label for="sort">Sort by:</label>
+    <select id="sort">
+        <option value="default">Default</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="rating">Rating</option>
+    </select>
+</div>
+
 <div class="container" id="product-container">
-    <div class="product" data-category="electronics">
+    <div class="product" data-category="electronics" data-price="19.99" data-rating="4">
         <img src="https://via.placeholder.com/150" alt="Product 1">
         <h2>Product 1</h2>
         <div class="rating">★★★★☆</div>
         <p>$19.99</p>
+        <button class="quick-view">Quick View</button>
         <button>Add to Cart</button>
         <button>Add to Wishlist</button>
     </div>
-    <div class="product" data-category="clothing">
+    <div class="product" data-category="clothing" data-price="29.99" data-rating="3">
         <img src="https://via.placeholder.com/150" alt="Product 2">
         <h2>Product 2</h2>
         <div class="rating">★★★☆☆</div>
         <p>$29.99</p>
+        <button class="quick-view">Quick View</button>
         <button>Add to Cart</button>
         <button>Add to Wishlist</button>
     </div>
-    <div class="product" data-category="home">
+    <div class="product" data-category="home" data-price="39.99" data-rating="5">
         <img src="https://via.placeholder.com/150" alt="Product 3">
         <h2>Product 3</h2>
         <div class="rating">★★★★★</div>
         <p>$39.99</p>
+        <button class="quick-view">Quick View</button>
         <button>Add to Cart</button>
         <button>Add to Wishlist</button>
     </div>
-    <div class="product" data-category="electronics">
+    <div class="product" data-category="electronics" data-price="59.99" data-rating="3">
         <img src="https://via.placeholder.com/150" alt="Product 4">
         <h2>Product 4</h2>
         <div class="rating">★★★☆☆</div>
         <p>$59.99</p>
+        <button class="quick-view">Quick View</button>
         <button>Add to Cart</button>
         <button>Add to Wishlist</button>
     </div>
@@ -168,7 +224,19 @@
     </div>
 </div>
 
+<!-- Modal for Quick View -->
+<div id="quickViewModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modal-title"></h2>
+        <img id="modal-image" src="" alt="Product Image" style="max-width: 100%;">
+        <div id="modal-rating"></div>
+        <p id="modal-price"></p>
+    </div>
+</div>
+
 <script>
+    // Filter functionality
     document.getElementById('category').addEventListener('change', function() {
         const selectedCategory = this.value;
         const products = document.querySelectorAll('.product');
@@ -181,6 +249,48 @@
             }
         });
     });
+
+    // Sort functionality
+    document.getElementById('sort').addEventListener('change', function() {
+        const sortValue = this.value;
+        const products = Array.from(document.querySelectorAll('.product'));
+        
+        if (sortValue === 'price-asc') {
+            products.sort((a, b) => a.dataset.price - b.dataset.price);
+        } else if (sortValue === 'price-desc') {
+            products.sort((a, b) => b.dataset.price - a.dataset.price);
+        } else if (sortValue === 'rating') {
+            products.sort((a, b) => b.dataset.rating - a.dataset.rating);
+        }
+        
+        const container = document.getElementById('product-container');
+        container.innerHTML = '';
+        products.forEach(product => container.appendChild(product));
+    });
+
+    // Quick View functionality
+    document.querySelectorAll('.quick-view').forEach(button => {
+        button.addEventListener('click', function() {
+            const product = this.closest('.product');
+            document.getElementById('modal-title').innerText = product.querySelector('h2').innerText;
+            document.getElementById('modal-image').src = product.querySelector('img').src;
+            document.getElementById('modal-rating').innerText = product.querySelector('.rating').innerText;
+            document.getElementById('modal-price').innerText = product.querySelector('p').innerText;
+            document.getElementById('quickViewModal').style.display = 'block';
+        });
+    });
+
+    // Close modal
+    document.querySelector('.close').addEventListener('click', function() {
+        document.getElementById('quickViewModal').style.display = 'none';
+    });
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('quickViewModal')) {
+            document.getElementById('quickViewModal').style.display = 'none';
+        }
+    };
 </script>
 
 </body>
