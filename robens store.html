@@ -33,20 +33,11 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-        .filter {
+        .filter, .sort {
             margin: 20px auto;
             text-align: left;
         }
-        .filter select {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .sort {
-            margin: 20px auto;
-            text-align: center;
-        }
-        .sort select {
+        .filter select, .sort select {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -131,6 +122,24 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .product, .wishlist-item {
+                flex: 1 1 100%;
+            }
+        }
+
+        /* Loading Spinner */
+        #loading {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -166,6 +175,8 @@
         <option value="rating">Rating</option>
     </select>
 </div>
+
+<div id="loading">Loading...</div>
 
 <div class="container" id="product-container">
     <div class="product" data-category="electronics" data-price="19.99" data-rating="4">
@@ -236,8 +247,18 @@
 </div>
 
 <script>
+    // Show loading spinner during actions
+    function showLoading() {
+        document.getElementById('loading').style.display = 'block';
+    }
+
+    function hideLoading() {
+        document.getElementById('loading').style.display = 'none';
+    }
+
     // Filter functionality
     document.getElementById('category').addEventListener('change', function() {
+        showLoading();
         const selectedCategory = this.value;
         const products = document.querySelectorAll('.product');
         
@@ -248,10 +269,12 @@
                 product.style.display = 'none';
             }
         });
+        hideLoading();
     });
 
     // Sort functionality
     document.getElementById('sort').addEventListener('change', function() {
+        showLoading();
         const sortValue = this.value;
         const products = Array.from(document.querySelectorAll('.product'));
         
@@ -266,6 +289,7 @@
         const container = document.getElementById('product-container');
         container.innerHTML = '';
         products.forEach(product => container.appendChild(product));
+        hideLoading();
     });
 
     // Quick View functionality
