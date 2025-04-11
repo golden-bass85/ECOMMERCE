@@ -57,6 +57,7 @@
             padding: 15px;
             flex: 1 1 calc(25% - 20px);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
         }
         .product img, .wishlist-item img {
             max-width: 100%;
@@ -79,9 +80,13 @@
             padding: 10px;
             cursor: pointer;
             border-radius: 5px;
+            transition: background-color 0.2s;
         }
         .product button:hover, .wishlist-item button:hover {
             background-color: #218838;
+        }
+        .product:hover {
+            transform: scale(1.02);
         }
         .wishlist {
             margin-top: 40px;
@@ -140,6 +145,20 @@
             font-size: 1.5em;
             color: #333;
         }
+
+        /* Notification */
+        #notification {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.5s;
+        }
     </style>
 </head>
 <body>
@@ -177,6 +196,7 @@
 </div>
 
 <div id="loading">Loading...</div>
+<div id="notification">Item added to cart!</div>
 
 <div class="container" id="product-container">
     <div class="product" data-category="electronics" data-price="19.99" data-rating="4">
@@ -185,7 +205,7 @@
         <div class="rating">★★★★☆</div>
         <p>$19.99</p>
         <button class="quick-view">Quick View</button>
-        <button>Add to Cart</button>
+        <button class="add-to-cart">Add to Cart</button>
         <button>Add to Wishlist</button>
     </div>
     <div class="product" data-category="clothing" data-price="29.99" data-rating="3">
@@ -194,7 +214,7 @@
         <div class="rating">★★★☆☆</div>
         <p>$29.99</p>
         <button class="quick-view">Quick View</button>
-        <button>Add to Cart</button>
+        <button class="add-to-cart">Add to Cart</button>
         <button>Add to Wishlist</button>
     </div>
     <div class="product" data-category="home" data-price="39.99" data-rating="5">
@@ -203,7 +223,7 @@
         <div class="rating">★★★★★</div>
         <p>$39.99</p>
         <button class="quick-view">Quick View</button>
-        <button>Add to Cart</button>
+        <button class="add-to-cart">Add to Cart</button>
         <button>Add to Wishlist</button>
     </div>
     <div class="product" data-category="electronics" data-price="59.99" data-rating="3">
@@ -212,7 +232,7 @@
         <div class="rating">★★★☆☆</div>
         <p>$59.99</p>
         <button class="quick-view">Quick View</button>
-        <button>Add to Cart</button>
+        <button class="add-to-cart">Add to Cart</button>
         <button>Add to Wishlist</button>
     </div>
 </div>
@@ -254,6 +274,22 @@
 
     function hideLoading() {
         document.getElementById('loading').style.display = 'none';
+    }
+
+    // Show notification
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.innerText = message;
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.opacity = '1';
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 500);
+            }, 2000);
+        }, 0);
     }
 
     // Filter functionality
@@ -301,6 +337,13 @@
             document.getElementById('modal-rating').innerText = product.querySelector('.rating').innerText;
             document.getElementById('modal-price').innerText = product.querySelector('p').innerText;
             document.getElementById('quickViewModal').style.display = 'block';
+        });
+    });
+
+    // Add to cart functionality
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            showNotification('Item added to cart!');
         });
     });
 
