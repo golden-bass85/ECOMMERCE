@@ -12,13 +12,13 @@
             background-color: #f4f4f4;
         }
         nav {
-            background-color: #333;
-            color: white;
+            background-color: #000;
+            color: red;
             padding: 10px;
             text-align: center;
         }
         nav a {
-            color: white;
+            color: red;
             margin: 0 15px;
             text-decoration: none;
         }
@@ -66,6 +66,7 @@
         .product h2, .wishlist-item h2 {
             font-size: 1.5em;
             margin: 10px 0;
+            color: #000;
         }
         .rating {
             color: gold;
@@ -74,7 +75,7 @@
             color: #555;
         }
         .product button, .wishlist-item button {
-            background-color: #28a745;
+            background-color: #c0392b; /* Red */
             color: white;
             border: none;
             padding: 10px;
@@ -83,7 +84,7 @@
             transition: background-color 0.2s;
         }
         .product button:hover, .wishlist-item button:hover {
-            background-color: #218838;
+            background-color: #a93226; /* Darker Red */
         }
         .product:hover {
             transform: scale(1.02);
@@ -152,7 +153,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: #28a745;
+            background-color: #c0392b; /* Red */
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -206,7 +207,7 @@
         <p>$19.99</p>
         <button class="quick-view">Quick View</button>
         <button class="add-to-cart">Add to Cart</button>
-        <button>Add to Wishlist</button>
+        <button class="add-to-wishlist">Add to Wishlist</button>
     </div>
     <div class="product" data-category="clothing" data-price="29.99" data-rating="3">
         <img src="https://via.placeholder.com/150" alt="Product 2">
@@ -215,7 +216,7 @@
         <p>$29.99</p>
         <button class="quick-view">Quick View</button>
         <button class="add-to-cart">Add to Cart</button>
-        <button>Add to Wishlist</button>
+        <button class="add-to-wishlist">Add to Wishlist</button>
     </div>
     <div class="product" data-category="home" data-price="39.99" data-rating="5">
         <img src="https://via.placeholder.com/150" alt="Product 3">
@@ -224,7 +225,7 @@
         <p>$39.99</p>
         <button class="quick-view">Quick View</button>
         <button class="add-to-cart">Add to Cart</button>
-        <button>Add to Wishlist</button>
+        <button class="add-to-wishlist">Add to Wishlist</button>
     </div>
     <div class="product" data-category="electronics" data-price="59.99" data-rating="3">
         <img src="https://via.placeholder.com/150" alt="Product 4">
@@ -233,7 +234,7 @@
         <p>$59.99</p>
         <button class="quick-view">Quick View</button>
         <button class="add-to-cart">Add to Cart</button>
-        <button>Add to Wishlist</button>
+        <button class="add-to-wishlist">Add to Wishlist</button>
     </div>
 </div>
 
@@ -244,13 +245,13 @@
             <img src="https://via.placeholder.com/150" alt="Wishlist Product 1">
             <h2>Wishlist Product 1</h2>
             <p>$19.99</p>
-            <button>Remove from Wishlist</button>
+            <button class="remove-from-wishlist">Remove from Wishlist</button>
         </div>
         <div class="wishlist-item">
             <img src="https://via.placeholder.com/150" alt="Wishlist Product 2">
             <h2>Wishlist Product 2</h2>
             <p>$29.99</p>
-            <button>Remove from Wishlist</button>
+            <button class="remove-from-wishlist">Remove from Wishlist</button>
         </div>
     </div>
 </div>
@@ -344,6 +345,21 @@
     document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', function() {
             showNotification('Item added to cart!');
+        });
+    });
+
+    // Add to wishlist functionality
+    document.querySelectorAll('.add-to-wishlist').forEach(button => {
+        button.addEventListener('click', function() {
+            showNotification('Item added to wishlist!');
+        });
+    });
+
+    // Remove from wishlist functionality
+    document.querySelectorAll('.remove-from-wishlist').forEach(button => {
+        button.addEventListener('click', function() {
+            showNotification('Item removed from wishlist!');
+            this.closest('.wishlist-item').remove();
         });
     });
 
